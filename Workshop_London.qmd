@@ -1,0 +1,153 @@
+---
+title: "London Games Workshop"
+format: html
+editor: visual
+---
+
+# Loading relevant libraries
+
+The dataset is processed in the software programme R, offering various methods for statistical analysis and graphic representation of the results. In R, one works with packages each adding numerous functionalities to the core functions of R. In this example, the relevant packages are:
+
+Documentation for each package: <br> *https://www.tidyverse.org/packages/* <br> https://cran.r-project.org/web/packages/tidytext/vignettes/tidytext.html <br>
+
+Additional information about R: https://www.r-project.org/
+
+```{r}
+
+
+```
+
+# Importing the data
+
+The dataset is loaded into R using the `read_excel` function from the `readxl` package. This function reads data from an Excel file and loads it into an R dataframe.
+
+```{r}
+
+
+```
+
+# Initial analysis
+
+## Publisher
+
+To get an overview of the most common publishers in the dataset, we count the occurrences of each publisher and sort them in descending order. The `count()` function from the `dplyr` package is used to count the number of occurrences of each unique publisher.
+
+We also introduce the **pipe operator (`%>%`)**, which is used to chain together multiple functions. The pipe allows us to pass the result of one function as input to the next, making the code more readable and easier to follow.
+
+```{r}
+
+
+```
+
+## Platforms
+
+We analyse the most frequently appearing platforms by counting occurrences, selecting the top 15, and visualizing the distribution using a column plot.
+
+-   `count(Platforme, sort = TRUE)`: Counts occurrences of each platform and sorts them in descending order.
+-   `slice_max(n, n = 15)`: Selects the top 15 platforms.
+-   `mutate(Platforme = reorder(Platforme, n))`: Reorders the factor levels of `Platforme` based on count.
+-   `ggplot(aes(x = Platforme, y = n)) + geom_col() + coord_flip()`: Creates a horizontal column chart to visualize the distribution.
+
+```{r}
+
+
+```
+
+## Timely Dispersion of Games
+
+We count the number of games released per year to analyse the temporal distribution.
+
+```{r}
+
+
+```
+
+## Visualisation of Timely Dispersion
+
+A line plot is created to visualise how the number of games released per year changes over time.
+
+-   `count(År)`: Counts the number of games for each year.
+-   `ggplot(aes(x = År, y = n, group = 1)) + geom_line()`: Creates a line chart.
+-   `theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))`: Rotates x-axis labels for better readability.
+
+```{r}
+
+
+
+```
+
+To explore a specific year, we filter the dataset for games released in **2011**.
+
+```{r}
+
+
+```
+
+Next, we examine which platforms were most common in **2011**.
+
+```{r}
+
+
+```
+
+## Text Mining on Titles
+
+### Loading Required Packages
+
+We load the `tidytext` package for text mining and the `stopwords` package to remove common words.
+
+```{r}
+
+
+```
+
+### Transforming Titles into Tidy Format
+
+We tokenize the game titles into individual words using `unnest_tokens()`. This function breaks down text into individual words while preserving structure.
+
+```{r}
+
+
+```
+
+Next, we create a dataset of Danish stopwords, which are common words like "and" or "the" that do not add meaning in text analysis.
+
+```{r}
+
+
+```
+
+### Most Frequent Words in Titles
+
+We remove common stopwords (both general and Danish) and count the most frequently occurring words in game titles.
+
+-   `anti_join(stop_words) %>% anti_join(stop_words_da)`: Removes stopwords.
+-   `count(word, sort = TRUE)`: Counts word occurrences and sorts them in descending order.
+
+```{r}
+
+
+```
+
+## Searching for Specific Keywords
+
+We filter the dataset to find games with titles containing specific keywords.
+
+### Games Related to "Skolehjælp"
+
+We search for game titles that contain the word "Skolehjælp."
+
+```{r}
+
+
+```
+
+### Games Related to "Toddlers"
+
+We search for game titles that contain the word "toddlers."
+
+```{r}
+
+
+
+```
